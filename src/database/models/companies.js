@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     company_description: DataTypes.STRING,
     ceo: DataTypes.STRING,
     tags: DataTypes.ARRAY(DataTypes.STRING),
-    score: DataTypes.INTEGER
+    score: DataTypes.FLOAT
   }, {
     sequelize,
     modelName: 'companies',

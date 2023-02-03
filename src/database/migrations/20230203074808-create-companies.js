@@ -28,7 +28,7 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.STRING)
       },
       score: {
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       createdAt: {
         allowNull: false,
