@@ -8,10 +8,14 @@ const getCompanyDetails = require('../utils/getCompanyDetails.js');
 const companyServices = {
   'saveCompany': async (body) => {
     const urlLink = body.urlLink;
-    const companyDetails = await getCompanyDetails(urlLink);
+    // const companyDetails = await getCompanyDetails(urlLink);
     // console.log(Array.isArray(companyDetails));
     // console.log(companyDetails[0]);
-    const createdCompanies = await companies.bulkCreate(companyDetails);
+    // await companies.bulkCreate(companyDetails);
+    const createdCompanies = await companies.findAll({
+      attributes: ['company_id', 'company_name']
+    }
+    );
     return createdCompanies;
   }
 }
