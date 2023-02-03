@@ -23,7 +23,19 @@ const getCompaniesBySector = async (req, res) => {
   }
 }
 
+const updateCompany = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updatedCompany = await companyServices.updateCompany(id, req.body);
+    res.status(200);
+    res.json(updatedCompany);
+  } catch (error) {
+    res.status(error.errorCode);
+    res.json({ message: error.message });
+  }
+}
 module.exports = {
   saveCompany,
-  getCompaniesBySector
+  getCompaniesBySector,
+  updateCompany
 };

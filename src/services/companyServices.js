@@ -14,7 +14,7 @@ const companyServices = {
     // console.log(companyDetails[0]);
     // await companies.bulkCreate(companyDetails);
     const createdCompanies = await companies.findAll({
-      attributes: ['company_id', 'company_name', 'score']
+      attributes: ['id', 'company_id', 'company_name', 'score']
     }
     );
     return createdCompanies;
@@ -24,13 +24,31 @@ const companyServices = {
       where: {
         company_sector: sector
       },
-      attributes: ['company_id', 'company_name', 'ceo', 'score'],
+      attributes: ['id', 'company_id', 'company_name', 'ceo', 'score'],
       order: [['score', 'DESC']]
     });
     if (!companiesBySector) {
       throw new HttpError('Sector not found', 404);
     }
     return companiesBySector;
+  },
+  'updateCompany': async (id, body) => {
+    await companies.update(body, {
+      where: {
+        id
+      },
+      attributes: ['id', 'company_id', 'company_name', 'ceo', 'score']
+    });
+    const updatedCompany = await companies.findOne({
+      where: {
+        id
+      },
+      attributes: ['id', 'company_id', 'company_name', 'ceo', 'score']
+    });
+    if (!updatedCompany) {
+      throw new HttpError('Company not found', 404);
+    }
+    return updatedCompany;
   }
 }
 module.exports = companyServices;

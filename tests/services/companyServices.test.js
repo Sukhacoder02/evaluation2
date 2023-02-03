@@ -43,4 +43,23 @@ describe('companyServices', () => {
       await expect(companyServices.getCompaniesBySector(null)).rejects.toThrow(err);
     });
   });
+  describe('function updateCompany', () => {
+    it('should return an updated company', async () => {
+      const returnValue = {
+        "id": 2,
+        "company_id": "46e1d061-e39d-4d5c-8e0e-3fa5d45d9efc",
+        "company_name": "Apple",
+        "ceo": "Sukhman Singh",
+        "score": 26.17
+      };
+      const mockBody = {
+        "company_description": "LOREM LOREM LOREM LOREM",
+        "ceo": "Sukhman Singh"
+      };
+      jest.spyOn(companies, 'update').mockResolvedValue(1);
+      jest.spyOn(companies, 'findOne').mockResolvedValue(returnValue);
+      const updatedCompany = await companyServices.updateCompany(2, mockBody);
+      expect(updatedCompany).toEqual(returnValue);
+    });
+  });
 }); 
