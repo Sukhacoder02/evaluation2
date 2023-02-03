@@ -1,7 +1,7 @@
 // require express
 const express = require('express');
 // require controller
-const { saveCompany } = require('../controllers/companyController.js');
+const { saveCompany, getCompaniesBySector } = require('../controllers/companyController.js');
 const router = express.Router();
 
 
@@ -12,6 +12,7 @@ router.get('', (req, res) => {
 
 
 router.post('/save', saveCompany);
+router.get('/companies', getCompaniesBySector);
 
 
 
