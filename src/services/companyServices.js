@@ -9,10 +9,8 @@ const HttpError = require('../utils/HTTPError');
 const companyServices = {
   'saveCompany': async (body) => {
     const urlLink = body.urlLink;
-    // const companyDetails = await getCompanyDetails(urlLink);
-    // console.log(Array.isArray(companyDetails));
-    // console.log(companyDetails[0]);
-    // await companies.bulkCreate(companyDetails);
+    const companyDetails = await getCompanyDetails(urlLink);
+    await companies.bulkCreate(companyDetails);
     const createdCompanies = await companies.findAll({
       attributes: ['id', 'company_id', 'company_name', 'score']
     }
@@ -49,6 +47,12 @@ const companyServices = {
       throw new HttpError('Company not found', 404);
     }
     return updatedCompany;
+  },
+  'getAllCompanies': async () => {
+    const allCompanies = await companies.findAll({
+      attributes: ['id', 'company_id', 'company_name', 'ceo', 'score']
+    });
+    return allCompanies;
   }
 }
 module.exports = companyServices;

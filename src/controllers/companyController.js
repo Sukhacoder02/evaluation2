@@ -34,8 +34,14 @@ const updateCompany = async (req, res) => {
     res.json({ message: error.message });
   }
 }
+const getAllCompanies = async (req, res) => {
+  const companies = await companyServices.getAllCompanies();
+  res.status(200);
+  res.json(companies);
+}
 module.exports = {
   saveCompany,
   getCompaniesBySector,
-  updateCompany
+  updateCompany,
+  getAllCompanies
 };
