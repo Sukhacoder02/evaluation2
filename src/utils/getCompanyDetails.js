@@ -1,7 +1,9 @@
 // require axios
 const axios = require('axios');
+const { EagerLoadingError } = require('sequelize');
 
 let uniqueSectors = [];
+let scoreArray = [];
 const companyDetails = [];
 const addCompanyDetails = async (companyArray) => {
   let newCompanyArray = [];
@@ -16,7 +18,7 @@ const addCompanyDetails = async (companyArray) => {
         newCompany.company_description = data.description.substring(0, 250);
         newCompany.ceo = data.ceo;
         newCompany.tags = data.tags;
-        newCompany.score = 0;
+        newCompany.score = scoreArray[i];
         newCompanyArray.push(newCompany);
       });
   }
@@ -29,18 +31,19 @@ const getScoreBySector = async (companyArray) => {
       .then((response) => {
         const data = response.data;
         data.forEach((company) => {
-          let foundCompany = companyArray.find((originalCompany) => {
-            return originalCompany.company_id == company.companyId;
-          });
           let scoreObject = {};
           company.performanceIndex.forEach((parameter) => {
             scoreObject[parameter.key] = parameter.value;
           });
           let score = ((scoreObject.cpi * 10) + (scoreObject.cf / 10000) + (scoreObject.mau * 10) + scoreObject.roic) / 4;
           score = Math.round(score * 100) / 100;
+          scoreArray.push(score);
         });
       });
   });
+  for (let i = 0; i < companyArray.length; i++) {
+    companyArray[i].score = scoreArray[i];
+  }
   return companyArray;
 }
 
