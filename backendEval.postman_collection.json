@@ -1,0 +1,84 @@
+{
+	"info": {
+		"_postman_id": "a18c0a32-d97a-47a5-ba86-33945e580c66",
+		"name": "backendEval",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET all companies",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "POST /api/save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"urlLink\": \"https://store-0001.s3.amazonaws.com/input.csv\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET By Sector",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH/ UPDATE a given id",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"company_description\" : \"LOREM LOREM LOREM LOREM\",\n    \"ceo\" : \"Sukhman Singh\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/companies/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"companies",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
