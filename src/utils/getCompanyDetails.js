@@ -3,34 +3,37 @@ const axios = require('axios');
 const { EagerLoadingError } = require('sequelize');
 
 let uniqueSectors = [];
-let scoreArray = [];
+
 const companyDetails = [];
-const addCompanyDetails = async (companyArray) => {
-  let newCompanyArray = [];
-  for (let i = 0; i < companyArray.length; i++) {
-    let id = companyArray[i].company_id;
+let scoreArray = [];
+
+const addCompanyDetails = async () => {
+  // let newCompanyArray = [];
+  for (let i = 0; i < companyDetails.length; i++) {
+    let id = companyDetails[i].company_id;
     await axios
       .get(`http://54.167.46.10/company/${id}`)
       .then((response) => {
-        let newCompany = { ...companyArray[i] };
+        // let newCompany = { ...companyArray[i] };
         let data = response.data;
-        newCompany.company_name = data.name;
-        newCompany.company_description = data.description.substring(0, 250);
-        newCompany.ceo = data.ceo;
-        newCompany.tags = data.tags;
-        newCompany.score = scoreArray[i];
-        newCompanyArray.push(newCompany);
+        companyDetails[i].company_name = data.name;
+        companyDetails[i].company_description = data.description.substring(0, 250);
+        companyDetails[i].ceo = data.ceo;
+        companyDetails[i].tags = data.tags;
       });
   }
-  return getScoreBySector(newCompanyArray);
+  return getScoreBySector();
 }
-const getScoreBySector = async (companyArray) => {
-  uniqueSectors.forEach(async (sector) => {
+const getScoreBySector = async () => {
+  for (let i = 0; i < uniqueSectors.length; i++) {
+    const sector = uniqueSectors[i];
     await axios
       .get(`http://54.167.46.10/sector?name=${sector}`)
       .then((response) => {
         const data = response.data;
         data.forEach((company) => {
+          // let foundCompany = companyDetails.find((originalCompany) => originalCompany.company_id === company.companyId);
+          // console.log(foundCompany);
           let scoreObject = {};
           company.performanceIndex.forEach((parameter) => {
             scoreObject[parameter.key] = parameter.value;
@@ -40,11 +43,11 @@ const getScoreBySector = async (companyArray) => {
           scoreArray.push(score);
         });
       });
-  });
-  for (let i = 0; i < companyArray.length; i++) {
-    companyArray[i].score = scoreArray[i];
   }
-  return companyArray;
+  for (let i = 0; i < companyDetails.length; i++) {
+    companyDetails[i].score = scoreArray[i];
+  }
+  return companyDetails;
 }
 
 
@@ -55,7 +58,7 @@ const getCompanyDetails = async (urlLink) => {
     .then((response) => {
       let data = response.data;
       let dataArray = data.split('\n');
-      let companyArray = [];
+
       dataArray.map((item) => {
         let itemArray = item.split(',');
         let company = {
@@ -64,13 +67,13 @@ const getCompanyDetails = async (urlLink) => {
         };
         sectors.push(itemArray[1]);
 
-        companyArray.push(company);
+        companyDetails.push(company);
       });
-      companyArray.splice(0, 1);
+      companyDetails.splice(0, 1);
       sectors.splice(0, 1);
       uniqueSectors = [...new Set(sectors)];
 
-      return addCompanyDetails(companyArray);
+      return addCompanyDetails();
     });
 }
 
