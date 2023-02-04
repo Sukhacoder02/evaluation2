@@ -37,11 +37,13 @@ describe('Company Controller', () => {
       const resolvedValue =
         [
           {
-            "id": 4,
-            "company_id": "8727cc61-8c4b-4285-8853-2db808392c04",
-            "company_name": "Google",
-            "ceo": "Mr. Jana Konopelski",
-            "score": 17.41,
+            dataValues: {
+              "id": 4,
+              "company_id": "8727cc61-8c4b-4285-8853-2db808392c04",
+              "company_name": "Google",
+              "ceo": "Mr. Jana Konopelski",
+              "score": 17.41,
+            },
           }
         ];
       const mockReq = {
