@@ -1,5 +1,6 @@
 // require axios
 const axios = require('axios');
+// const companyUtils = require('./companyUtils');
 
 const addCompanyDetails = async (incompleteCompanyDetails, sectors) => {
   for (let i = 0; i < incompleteCompanyDetails.length; i++) {
@@ -11,7 +12,7 @@ const addCompanyDetails = async (incompleteCompanyDetails, sectors) => {
     incompleteCompanyDetails[i].ceo = data.ceo;
     incompleteCompanyDetails[i].tags = data.tags;
   }
-  return await getScoreBySector(incompleteCompanyDetails, sectors);
+  return await companyUtils.getScoreBySector(incompleteCompanyDetails, sectors);
 }
 const getScoreBySector = async (completeCompanyDetails, sectors) => {
   const promiseArray = [];
@@ -57,9 +58,10 @@ const getCompanyDetails = async (urlLink) => {
   companyArray.splice(0, 1);
   sectors.delete('company_sector');
   sectors = [...sectors];
-  return await addCompanyDetails(companyArray, sectors);
+  return await companyUtils.addCompanyDetails(companyArray, sectors);
 }
 
 
 
-module.exports = { getCompanyDetails };
+const companyUtils = { getCompanyDetails, addCompanyDetails, getScoreBySector };
+module.exports = companyUtils;

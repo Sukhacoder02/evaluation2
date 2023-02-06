@@ -93,7 +93,7 @@ describe('Company Controller', () => {
     });
     it('Should throw an error when id is not found', async () => {
       const resolvedValue = {
-        errorCode: 404,
+        code: 404,
         message: "Company not found"
       };
       const mockReq = {
@@ -101,8 +101,7 @@ describe('Company Controller', () => {
           id: 50
         },
         body: {
-          company_name: "Google",
-          ceo: "Mr. Jana Konopelski",
+          ceo: "Sukhman Singh",
         }
       };
       const mockRes = {

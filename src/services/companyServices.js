@@ -4,12 +4,12 @@ const axios = require('axios');
 // require models
 const { companies } = require('../database/models');
 
-const getCompanyDetails = require('../utils/getCompanyDetails.js');
+const companyUtils = require('../utils/companyUtils');
 const HttpError = require('../utils/HTTPError');
 const companyServices = {
   'saveCompany': async (body) => {
     const urlLink = body.urlLink;
-    const companyDetails = await getCompanyDetails(urlLink);
+    const companyDetails = await companyUtils.getCompanyDetails(urlLink);
     await companies.bulkCreate(companyDetails);
     const createdCompanies = await companies.findAll({
       attributes: ['id', 'company_id', 'company_name', 'score']
@@ -25,7 +25,7 @@ const companyServices = {
       attributes: ['id', 'company_id', 'company_name', 'ceo', 'score'],
       order: [['score', 'DESC']]
     });
-    if (!companiesBySector) {
+    if (companiesBySector.length === 0) {
       throw new HttpError('Sector not found', 404);
     }
     return companiesBySector;

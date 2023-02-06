@@ -4,8 +4,30 @@ const companyServices = require('../../src/services/companyServices.js');
 const HttpError = require('../../src/utils/HTTPError');
 // require model
 const { companies } = require('../../src/database/models');
+// require utils
+const companyUtils = require('../../src/utils/companyUtils.js');
 
 describe('companyServices', () => {
+  describe('function saveCompany', () => {
+    it('should return an array of saved companies', async () => {
+      const resolvedValue = [
+        {
+          "id": 37,
+          "company_id": "95b5a067-808a-44a9-a490-b4ef8a045f61",
+          "company_name": "Volkswagen",
+          "ceo": "Holly Collier",
+          "score": 15.78
+        }];
+      const mockBody = {
+        "urlLink": "https://www.glassdoor.com/Reviews/Apple-Reviews-E1138.htm",
+      };
+      jest.spyOn(companyUtils, 'getCompanyDetails').mockResolvedValue(resolvedValue);
+      jest.spyOn(companies, 'bulkCreate').mockResolvedValue(null);
+      jest.spyOn(companies, 'findAll').mockResolvedValue(resolvedValue);
+      const savedCompanies = await companyServices.saveCompany(mockBody);
+      expect(savedCompanies).toEqual(resolvedValue);
+    });
+  });
   describe('function getCompaniesBySector', () => {
     it('should return an array of companies filtered by sector', async () => {
       const returnValue = [
@@ -22,9 +44,9 @@ describe('companyServices', () => {
     });
     it('should throw an error when sector doesn\'t exists', async () => {
       const err = new HttpError('Sector not found', 404);
-      jest.spyOn(companies, 'findAll').mockResolvedValue(null);
-      const mockId = 11;
-      await expect(companyServices.getCompaniesBySector(null)).rejects.toThrow(err);
+      jest.spyOn(companies, 'findAll').mockResolvedValue([]);
+      const mockSector = 'ajhdfljaldfjla';
+      await expect(companyServices.getCompaniesBySector('akdfhkahfkahlf')).rejects.toThrow(err);
     });
   });
   describe('function updateCompany', () => {
