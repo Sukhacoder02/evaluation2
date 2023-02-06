@@ -1,17 +1,20 @@
 // require axios
 const axios = require('axios');
-// const companyUtils = require('./companyUtils');
 
 const addCompanyDetails = async (incompleteCompanyDetails, sectors) => {
+  const promiseArray = [];
   for (let i = 0; i < incompleteCompanyDetails.length; i++) {
     let id = incompleteCompanyDetails[i].company_id;
-    const axiosData = await axios.get(`http://54.167.46.10/company/${id}`);
-    const data = axiosData.data;
-    incompleteCompanyDetails[i].company_name = data.name;
-    incompleteCompanyDetails[i].company_description = data.description.substring(0, 250);
-    incompleteCompanyDetails[i].ceo = data.ceo;
-    incompleteCompanyDetails[i].tags = data.tags;
+    promiseArray.push(axios.get(`http://54.167.46.10/company/${id}`));
   }
+  let responses = await Promise.all(promiseArray);
+  responses.forEach((response, index) => {
+    const company = response.data;
+    incompleteCompanyDetails[index].company_name = company.name;
+    incompleteCompanyDetails[index].company_description = company.description.substring(0, 250);
+    incompleteCompanyDetails[index].ceo = company.ceo;
+    incompleteCompanyDetails[index].tags = company.tags;
+  });
   return await companyUtils.getScoreBySector(incompleteCompanyDetails, sectors);
 }
 const getScoreBySector = async (completeCompanyDetails, sectors) => {
@@ -19,7 +22,6 @@ const getScoreBySector = async (completeCompanyDetails, sectors) => {
   for (let i = 0; i < sectors.length; i++) {
     promiseArray.push(axios.get(`http://54.167.46.10/sector?name=${sectors[i]}`));
   }
-
   let responses = await Promise.all(promiseArray);
   responses.forEach((response) => {
     const data = response.data;
